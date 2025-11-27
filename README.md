@@ -1,13 +1,13 @@
 # Setup
 
 Run:
-```
+```bash
 pip install -r requirements.txt
 python -m flask --app app scrape-ids
 ```
 
-Restart docker:
-```
+Restart docker (drop DB tables, create new one):
+```bash
 docker-compose down -v
 docker-compose up -d
 ```
@@ -22,6 +22,11 @@ docker-compose exec db psql -U hn_user -d hn_db
 SELECT * FROM articles; # View articles table data
 \d articles             # Describe articles table structure
 \q                      # Exit psql
+```
+
+Run unit test:
+```bash
+python -m pytest .\tests\test_scraper.py -q
 ```
 
 # Why I did not use public API for scraping Hacker News data
