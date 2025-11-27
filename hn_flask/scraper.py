@@ -62,7 +62,7 @@ def fetch_articles_from_pages():
             break
 
         # TEST - limit the count of pages to avoid long runs for testing
-        if page >= 2:
+        if page >= 3:
             print("[TEST]: Reached page limit for testing. Stopping.")
             break
 

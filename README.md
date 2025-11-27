@@ -5,6 +5,9 @@ Run:
 pip install -r requirements.txt
 python -m flask --app app scrape-ids
 ```
+Run with frontend:
+```python -m flask run```
+
 
 Restart docker (drop DB tables, create new one):
 ```bash

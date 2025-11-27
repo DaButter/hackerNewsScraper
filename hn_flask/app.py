@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify, render_template
 from scraper import fetch_articles_from_pages
 from models import Article, SessionLocal, init_db
 import datetime
@@ -32,3 +32,25 @@ def scrape_ids():
     session.commit()
     print(f"Saved/Updated {len(news_articles)} articles in database.")
     session.close()
+
+
+@app.route("/api/articles")
+def api_articles():
+    session = SessionLocal()
+    articles = session.query(Article).all()
+    result = []
+    for a in articles:
+        result.append({
+            "id": a.id,
+            "title": a.title,
+            "link": a.link,
+            "points": a.points,
+            "created_at": a.created_at.isoformat() if a.created_at else None,
+        })
+    session.close()
+    return jsonify(result)
+
+
+@app.route("/")
+def index():
+    return render_template("index.html")
