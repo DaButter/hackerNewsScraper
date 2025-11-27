@@ -1,4 +1,3 @@
-# scraper.py
 import requests
 from bs4 import BeautifulSoup
 
@@ -14,19 +13,19 @@ def fetch_articles_from_html_page(html_content):
 
         title_tag = tr.select_one("span.titleline > a")
         title = title_tag.get_text(strip=True) if title_tag else None
+        # in case link is missing, set to None
         link = title_tag["href"] if title_tag and title_tag.has_attr("href") else None
 
-        # The points and time are in the following rows (sibling tr)
         points = None
         created = None
 
         subtext_tr = tr.find_next_sibling("tr")
         if subtext_tr:
-            # score id is usually score_<hn_id>
+            # score id is in score_<hn_id>
             score_sel = subtext_tr.select_one(f"span.score#score_{hn_id}")
             if score_sel:
                 score_text = score_sel.get_text(strip=True)
-                # score_text typically like "130 points" or "1 point"
+                # score_text f.e. "130 points" or "1 point"
                 try:
                     points = int(score_text.split()[0].replace(",", ""))
                 except Exception:
@@ -34,7 +33,7 @@ def fetch_articles_from_html_page(html_content):
 
             age_sel = subtext_tr.select_one("span.age")
             if age_sel and age_sel.has_attr("title"):
-                # title attr often holds an ISO timestamp + epoch ("2025-11-27T10:54:02 1764240842")
+                # title attr holds an ISO timestamp + epoch ("2025-11-27T10:54:02 1764240842")
                 created = age_sel["title"].split()[0]
 
         articles.append({

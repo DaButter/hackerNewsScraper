@@ -18,7 +18,7 @@ def scrape_ids():
         created_at = datetime.datetime.fromisoformat(item.get("created_at", "1970-01-01T00:00:00"))
         article = session.query(Article).filter_by(id=item["id"]).first()
         if article:
-            article.points = item.get("score", 0)
+            article.points = item.get("points", 0)
         else:
             article = Article(
                 id=item["id"],

@@ -5,9 +5,9 @@ Base = declarative_base()
 
 class Article(Base):
     __tablename__ = "articles"
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=False)
     title = Column(String, nullable=False)
-    link = Column(String, nullable=False)
+    link = Column(String, nullable=True)
     points = Column(Integer, default=0)
     created_at = Column(DateTime, nullable=True)
 
