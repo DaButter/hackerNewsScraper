@@ -15,10 +15,18 @@ def scrape_ids():
     # print(f"[DEBUG] Articles fetched: {(news_articles)}")
 
     for item in news_articles:
-        created_at = datetime.datetime.fromisoformat(item.get("created_at", "1970-01-01T00:00:00"))
+        created_at = None
+        created_val = item.get("created_at")
+        if isinstance(created_val, str) and created_val:
+            try:
+                created_at = datetime.datetime.fromisoformat(created_val)
+            except ValueError:
+                created_at = None
+
         article = session.query(Article).filter_by(id=item["id"]).first()
         if article:
-            article.points = item.get("points", 0)
+            article.points = item.get("points", article.points)
+
         else:
             article = Article(
                 id=item["id"],
