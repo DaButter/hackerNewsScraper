@@ -11,7 +11,7 @@ class Article(Base):
     points = Column(Integer, default=0)
     created_at = Column(DateTime, nullable=True)
 
-DATABASE_URL = "postgresql://hn_user:hn_pass@localhost:5432/hn_db"
+DATABASE_URL = "postgresql://hn_user:hn_pass@db:5432/hn_db"
 engine = create_engine(DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(bind=engine)
 

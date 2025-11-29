@@ -8,8 +8,17 @@ services:
       POSTGRES_DB: hn_db
     ports:
       - "5432:5432"
-    volumes:
-      - hn_db_data:/var/lib/postgresql/data
 
-volumes:
-  hn_db_data:
+  web:
+    build: .
+    container_name: hn_flask_app
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./hn_flask:/app/hn_flask
+    environment:
+      FLASK_APP: hn_flask/app.py
+      FLASK_RUN_HOST: 0.0.0.0
+      FLASK_ENV: development

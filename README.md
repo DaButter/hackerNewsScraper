@@ -15,6 +15,16 @@ docker-compose down -v
 docker-compose up -d
 ```
 
+Start everything:
+```bash
+docker-compose up -d --build
+```
+
+Scrape data:
+```bash
+docker-compose run --rm web flask scrape-ids
+```
+
 Check DB contents:
 ```bash
 # Access the PostgreSQL container and open psql
