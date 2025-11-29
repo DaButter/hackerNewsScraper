@@ -1,6 +1,7 @@
 # Prerequisites
 
 * Docker desktop
+* In normal development `.env` should not be committed!
 
 # How to start the application
 
@@ -18,7 +19,7 @@ From project root directory run the following commands:
    - Subsequent calls add new articles and update existing ones in the database.
 
 4. `docker-compose down`
-   - Stop the application and containers. Data persists in the Postgres volume unless removed.
+   - Stop the application and containers. Data persists in the Postgres volume unless explicitly removed.
 
 
 # Why not use public API for scraping?
@@ -56,7 +57,7 @@ SELECT * FROM articles; # view articles table data
 \q                      # exit psql
 ```
 
-Stop and remove container:
+Stop and remove container + db volume:
 ```bash
 docker-compose down -v
 ```

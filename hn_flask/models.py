@@ -1,3 +1,4 @@
+import os
 from sqlalchemy import Column, Integer, String, DateTime, create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
@@ -11,6 +12,9 @@ class Article(Base):
     points = Column(Integer, default=0)
     created_at = Column(DateTime, nullable=True)
 
-DATABASE_URL = "postgresql://hn_user:hn_pass@db:5432/hn_db"
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "postgresql://hn_user:hn_pass@db:5432/hn_db"
+)
 engine = create_engine(DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(bind=engine)
