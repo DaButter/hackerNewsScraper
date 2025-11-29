@@ -1,52 +1,21 @@
-# Setup
+# Prerequisites
 
-Run:
-```bash
-pip install -r requirements.txt
-python -m flask --app app scrape-ids
-```
-Run with frontend:
-```python -m flask run```
+* Docker desktop
 
+# How to start the application
 
-Restart docker (drop DB tables, create new one):
-```bash
-docker-compose down -v
-docker-compose up -d
-```
+From project root directory the following commands:
+1. `docker-compose up -d --build` - sets up PostgresDB, installs Python dependencies and starts the application. Application available at: `localhost:5000`
 
-Start everything:
-```bash
-docker-compose up -d --build
-```
+2. `docker-compose run --rm web flask scrape-ids` - scrapes article data from `https://news.ycombinator.com/`. Subsequent calls of scraper will add newly created entries to DB and update score points to existing entries.
 
-Scrape data:
-```bash
-docker-compose run --rm web flask scrape-ids
-```
+3. `docker-compose down` - stop application.
 
-Check DB contents:
-```bash
-# Access the PostgreSQL container and open psql
-docker-compose exec db psql -U hn_user -d hn_db
-
-# Once inside psql, you can run commands:
-\dt                     # List all tables
-SELECT * FROM articles; # View articles table data
-\d articles             # Describe articles table structure
-\q                      # Exit psql
-```
-
-Run unit test:
-```bash
-python -m pytest .\tests\test_scraper.py -q
-```
-
-# Why I did not use public API for scraping Hacker News data
+# Why I did not use public API for scraping Hacker News articles
 
 Hacker News has a public API ```https://github.com/HackerNews/API?tab=readme-ov-file```.
 
-Even if we scrape all news article unique IDs (which is ~750 at the moment), we still need to parse IDs one by one to the API. There is not an option to parse a list of IDs.
+Even if we scrape all news article unique IDs (which is ~800 at the moment), we still need to parse IDs one by one to the API. There is not an option to parse a list of IDs.
 
 API returns a beautiful JSON (for example, ```https://hacker-news.firebaseio.com/v0/item/46068015.json?print=pretty```), if we provide an article ID:
 ```json
@@ -64,4 +33,25 @@ API returns a beautiful JSON (for example, ```https://hacker-news.firebaseio.com
 ```
 The N count of HTTP requests is a big performance bottleneck. So I chose to stick to scraping from raw HTML with bs4 library.
 
-<!-- NOTE FOR ME: this API could be used by unit tests (?) -->
+# Useful
+
+Log into DB:
+```bash
+docker-compose exec db psql -U hn_user -d hn_db
+
+# Once inside psql:
+\dt                     # List all tables
+SELECT * FROM articles; # View articles table data
+\d articles             # Describe articles table structure
+\q                      # Exit psql
+```
+
+Stop and remove container:
+```bash
+docker-compose down -v
+```
+
+Run unit test:
+```bash
+python -m pytest .\tests\test_scraper.py -q
+```

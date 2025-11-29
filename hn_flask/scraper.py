@@ -61,11 +61,6 @@ def fetch_articles_from_pages():
             print(f"No articles found on page {page}. Stopping.")
             break
 
-        # TEST - limit the count of pages to avoid long runs for testing
-        # if page >= 3:
-        #     print("[TEST]: Reached page limit for testing. Stopping.")
-        #     break
-
         print(f"Found {len(articles)} articles on page {page}")
         all_articles.extend(articles)
         page += 1
