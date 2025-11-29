@@ -6,11 +6,15 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
+    table td, table th { padding: 6px 10px; border: 1px solid #ddd; }
   </style>
 </head>
 <body>
   <div id="app">
     <h1>Hacker News Scraped Articles</h1>
+    <p v-if="loading">Loading articles...</p>
+    <p v-if="error" style="color:red;">{{ error }}</p>
+
     <table id="articles-table" class="display" style="width:100%">
       <thead>
         <tr>
@@ -28,7 +32,7 @@
           <td>{{ a.title }}</td>
           <td><a :href="a.link" target="_blank" v-if="a.link">Open</a></td>
           <td>{{ a.points }}</td>
-          <td>{{ a.created_at }}</td>
+          <td>{{ formatDate(a.created_at) }}</td>
         </tr>
       </tbody>
       {% endraw %}
@@ -44,22 +48,48 @@
 
     createApp({
       data() {
-        return { articles: [] };
+        return { articles: [], error: null, loading: true };
       },
-      mounted() {
-        fetch('/api/articles')
-          .then(r => r.json())
-          .then(data => {
-            this.articles = data;
-            this.$nextTick(() => {
+
+      methods: {
+        formatDate(val) {
+          if (!val) return "";
+
+          const date = new Date(val);
+          const diff = (Date.now() - date) / 1000;
+
+          // for more recent articles, show relative time
+          if (diff < 60) return "just now";
+          if (diff < 3600) return `${Math.floor(diff / 60)} min ago`;
+          if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
+
+          return date.toLocaleString();
+        }
+      },
+
+    mounted() {
+      fetch('/api/articles')
+        .then(r => r.json())
+        .then(data => {
+          this.articles = data;
+          // prevent re-initialization of DataTable
+          this.$nextTick(() => {
+            if (!$.fn.dataTable.isDataTable('#articles-table')) {
               $('#articles-table').DataTable({
                 pageLength: 10,
-                order: [[3, 'desc']],
+                order: [[3, 'desc']]
               });
-            });
-          })
-          .catch(err => console.error('Failed to load articles', err));
-      }
+            }
+          });
+        })
+        .catch(err => {
+          console.error('Failed to load articles', err);
+          this.error = "Could not load articles.";
+        })
+       .finally(() => {
+          this.loading = false;
+        });
+    }
     }).mount('#app');
   </script>
 </body>
