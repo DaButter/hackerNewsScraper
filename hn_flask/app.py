@@ -12,7 +12,7 @@ def scrape_ids():
 
     news_articles = fetch_articles_from_pages()
     print(f"First article returned: {news_articles[0] if news_articles else 'No articles fetched'}")
-    # print(f"[DEBUG] Articles fetched: {(news_articles)}")
+    # print(f"[DEBUG] JSON list of articles fetched: {(news_articles)}")
 
     for item in news_articles:
         created_at = None
