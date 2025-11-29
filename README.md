@@ -4,14 +4,24 @@
 
 # How to start the application
 
-From project root directory the following commands:
-1. `docker-compose up -d --build` - sets up PostgresDB, installs Python dependencies and starts the application. Application available at: `localhost:5000`
+From project root directory run the following commands:
 
-2. `docker-compose run --rm web flask scrape-ids` - scrapes article data from `https://news.ycombinator.com/`. Subsequent calls of scraper will add newly created entries to DB and update score points to existing entries.
+1. `docker-compose up -d --build`
+   - Sets up PostgresDB, installs Python dependencies, and starts the application.  
+   - Application will be available at: [http://localhost:5000](http://localhost:5000)
 
-3. `docker-compose down` - stop application.
+2. `docker-compose run --rm web pytest -q`
+   - Run all unit tests in the `tests/` folder.
 
-# Why I did not use public API for scraping Hacker News articles
+3. `docker-compose run --rm web flask scrape-ids`
+   - Scrapes article data from `https://news.ycombinator.com/`.
+   - Subsequent calls add new articles and update existing ones in the database.
+
+4. `docker-compose down`
+   - Stop the application and containers. Data persists in the Postgres volume unless removed.
+
+
+# Why not use public API for scraping?
 
 Hacker News has a public API ```https://github.com/HackerNews/API?tab=readme-ov-file```.
 
@@ -40,18 +50,13 @@ Log into DB:
 docker-compose exec db psql -U hn_user -d hn_db
 
 # Once inside psql:
-\dt                     # List all tables
-SELECT * FROM articles; # View articles table data
-\d articles             # Describe articles table structure
-\q                      # Exit psql
+\dt                     # list all tables
+SELECT * FROM articles; # view articles table data
+\d articles             # describe articles table structure
+\q                      # exit psql
 ```
 
 Stop and remove container:
 ```bash
 docker-compose down -v
-```
-
-Run unit test:
-```bash
-python -m pytest .\tests\test_scraper.py -q
 ```

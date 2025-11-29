@@ -1,13 +1,12 @@
 from flask import Flask, jsonify, render_template
 from scraper import fetch_articles_from_pages
-from models import Article, SessionLocal, init_db
+from models import Article, SessionLocal
 import datetime
 
 app = Flask(__name__)
 
 @app.cli.command("scrape-ids")
 def scrape_ids():
-    init_db()
     session = SessionLocal()
 
     news_articles = fetch_articles_from_pages()
