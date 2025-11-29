@@ -3,10 +3,14 @@
 Run:
 ```bash
 pip install -r requirements.txt
-python -m flask --app app scrape-ids
+python -m flask scrape-ids
+python -m flask run
 ```
-Run with frontend:
-```python -m flask run```
+
+Process flow (at this moment)
+```
+Browser → AJAX Request → Flask API → Database → JSON Response → DataTables renders table
+```
 
 
 Restart docker (drop DB tables, create new one):

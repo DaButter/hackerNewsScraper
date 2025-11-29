@@ -21,46 +21,34 @@
           <th>Created At</th>
         </tr>
       </thead>
-      {% raw %}
-      <tbody>
-        <tr v-for="a in articles" :key="a.id">
-          <td>{{ a.id }}</td>
-          <td>{{ a.title }}</td>
-          <td><a :href="a.link" target="_blank" v-if="a.link">Open</a></td>
-          <td>{{ a.points }}</td>
-          <td>{{ a.created_at }}</td>
-        </tr>
-      </tbody>
-      {% endraw %}
+      <!-- <tbody> -->
+      <!-- </tbody> -->
     </table>
   </div>
 
-  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
   <script>
-    const { createApp } = Vue;
-
-    createApp({
-      data() {
-        return { articles: [] };
-      },
-      mounted() {
-        fetch('/api/articles')
-          .then(r => r.json())
-          .then(data => {
-            this.articles = data;
-            this.$nextTick(() => {
-              $('#articles-table').DataTable({
-                pageLength: 10,
-                order: [[3, 'desc']],
-              });
-            });
-          })
-          .catch(err => console.error('Failed to load articles', err));
-      }
-    }).mount('#app');
+    $(document).ready(function() {
+      $('#articles-table').DataTable({
+        serverSide: true,
+        processing: true,
+        ajax: {
+          url: '/api/articles',
+          type: 'GET'
+        },
+        pageLength: 10,
+        order: [[3, 'desc']],
+        columns: [
+          { title: 'ID', data: 0 },
+          { title: 'Title', data: 1 },
+          { title: 'Link', data: 2, render: function(data, type, row) { if(data) return '<a href="'+data+'" target="_blank">Open</a>'; return ''; } },
+          { title: 'Points', data: 3 },
+          { title: 'Created At', data: 4 }
+        ]
+      });
+    });
   </script>
 </body>
 </html>
