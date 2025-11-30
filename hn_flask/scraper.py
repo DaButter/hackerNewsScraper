@@ -29,18 +29,19 @@ def fetch_articles_from_html_page(html_content):
                 try:
                     points = int(score_text.split()[0].replace(",", ""))
                 except Exception:
+                    print(f"Failed to parse points from score text: {score_text}")
                     points = None
 
             age_sel = subtext_tr.select_one("span.age")
             if age_sel and age_sel.has_attr("title"):
                 # title attr holds an ISO timestamp + epoch ("2025-11-27T10:54:02 1764240842")
-                created = age_sel["title"].split()[0]
+                created = age_sel["title"].split()[0] + "Z"
 
         articles.append({
             "id": hn_id,
             "title": title,
             "link": link,
-            "points": points,
+            "points": points if points is not None else 0,
             "created_at": created,
         })
 

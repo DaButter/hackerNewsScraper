@@ -4,9 +4,10 @@ from models import Article, SessionLocal
 import datetime
 
 app = Flask(__name__)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
-@app.cli.command("scrape-ids")
-def scrape_ids():
+@app.cli.command("scrape-articles")
+def scrape_articles():
     session = SessionLocal()
 
     news_articles = fetch_articles_from_pages()

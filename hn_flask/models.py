@@ -10,7 +10,7 @@ class Article(Base):
     title = Column(String, nullable=False)
     link = Column(String, nullable=True)
     points = Column(Integer, default=0)
-    created_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime(timezone=True), nullable=True)
 
 DATABASE_URL = os.getenv(
     "DATABASE_URL",

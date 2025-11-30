@@ -14,7 +14,7 @@ From project root directory run the following commands:
 2. `docker-compose run --rm web pytest -q`
    - Run all unit tests in the `tests/` folder.
 
-3. `docker-compose run --rm web flask scrape-ids`
+3. `docker-compose run --rm web flask scrape-articles`
    - Scrapes article data from `https://news.ycombinator.com/`.
    - Subsequent calls add new articles and update existing ones in the database.
 

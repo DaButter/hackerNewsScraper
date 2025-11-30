@@ -20,8 +20,8 @@
     }
 
     #articles-table thead {
-      background-color: #3498db;
-      color: white;
+      background-color: #f2f2f2;
+      color: #333;
     }
 
     .spinner {
@@ -66,8 +66,8 @@
           <td>{{ a.id }}</td>
           <td>{{ a.title }}</td>
           <td><a :href="a.link" target="_blank" v-if="a.link">Open</a></td>
-          <td>⭐ {{ a.points }}</td>
-          <td>{{ formatDate(a.created_at) }}</td>
+          <td :data-order="a.points">⭐ {{ a.points }}</td>
+          <td :data-order="new Date(a.created_at).getTime()">{{ formatDate(a.created_at) }}</td>
         </tr>
       </tbody>
       {% endraw %}

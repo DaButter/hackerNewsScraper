@@ -69,7 +69,7 @@ def test_parse_single_article():
     assert a["title"] == "Example Title"
     assert a["link"] == "https://example.com/article"
     assert a["points"] == 130
-    assert a["created_at"] == "2025-11-27T10:54:02"
+    assert a["created_at"] == "2025-11-27T10:54:02Z"
 
 def test_missing_score_and_link():
     articles = fetch_articles_from_html_page(MISSING_SCORE_LINK_HTML)
@@ -78,9 +78,9 @@ def test_missing_score_and_link():
     assert a["id"] == 123
     assert a["title"] == "Title Without Link"
     assert a["link"] is None
-    # no score span -> points should be None per scraper logic
-    assert a["points"] is None
-    assert a["created_at"] == "2025-11-27T12:00:00"
+    # if points are missing, should default to 0
+    assert a["points"] == 0
+    assert a["created_at"] == "2025-11-27T12:00:00Z"
 
 def test_multiple_articles():
     articles = fetch_articles_from_html_page(MULTI_HTML)
@@ -89,5 +89,5 @@ def test_multiple_articles():
     assert ids == [1, 2]
     assert articles[0]["points"] == 10
     assert articles[1]["points"] == 20
-    assert articles[0]["created_at"] == "2025-11-27T01:00:00"
-    assert articles[1]["created_at"] == "2025-11-27T02:00:00"
+    assert articles[0]["created_at"] == "2025-11-27T01:00:00Z"
+    assert articles[1]["created_at"] == "2025-11-27T02:00:00Z"
